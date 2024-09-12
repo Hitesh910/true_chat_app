@@ -10,6 +10,7 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  @override
   void initState() {
     super.initState();
     bool isLogin = AuthHelper.helper.checkUser();
@@ -41,7 +42,7 @@ class _SplashScreenState extends State<SplashScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Container(
-                height: 400,
+                height: 350,
                 width: MediaQuery.sizeOf(context).width,
                 alignment: Alignment.center,
                 decoration: const BoxDecoration(
@@ -50,12 +51,13 @@ class _SplashScreenState extends State<SplashScreen> {
                     fit: BoxFit.fill,
                   ),
                 ),
-                child: Text(
+                child: const Text(
                   "True chat app",
                   style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold),
+                    color: Colors.white,
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
             ],

@@ -1,7 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class ChatModel
 {
   String? msg,senderUID,uid;
-  DateTime? dateTime;
+  Timestamp? dateTime;
 
   ChatModel({this.msg, this.senderUID, this.dateTime, this.uid});
 
@@ -10,7 +12,7 @@ class ChatModel
     return ChatModel(
       msg: m1['msg'],
       senderUID: m1['SenderUID'],
-      dateTime: m1['dateTime']
+      dateTime: m1['date']
     );
   }
 }

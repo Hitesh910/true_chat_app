@@ -49,16 +49,16 @@ class AuthHelper
 
   Future<String> signInWithGoogleEmailAndPassword()
   async {
-    final GoogleSignInAccount? googleAccount = await GoogleSignIn().signIn();
+     GoogleSignInAccount? googleAccount = await GoogleSignIn().signIn();
 
-    final GoogleSignInAuthentication? googleAuth = await googleAccount?.authentication;
+     GoogleSignInAuthentication? googleAuth = await googleAccount?.authentication;
 
-    final credential = GoogleAuthProvider.credential(
+    var credential = GoogleAuthProvider.credential(
       accessToken:googleAuth?.accessToken,
       idToken: googleAuth?.idToken,
     );
 
-    var userCred =await auth.signInWithCredential(credential);
+    UserCredential userCred =await auth.signInWithCredential(credential);
 
     user = userCred.user;
     if(user != null)

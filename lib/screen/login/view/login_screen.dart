@@ -9,14 +9,14 @@ import 'package:get/get_core/src/get_main.dart';
 
 import '../../../utils/helper/auth_helper.dart';
 
-class Login1Screen extends StatefulWidget {
-  const Login1Screen({super.key});
+class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
 
   @override
-  State<Login1Screen> createState() => _Login1ScreenState();
+  State<LoginScreen> createState() => _Login1ScreenState();
 }
 
-class _Login1ScreenState extends State<Login1Screen> {
+class _Login1ScreenState extends State<LoginScreen> {
   TextEditingController txtEmail = TextEditingController();
   TextEditingController txtPassword = TextEditingController();
   GlobalKey<FormState> formKey = GlobalKey<FormState>();

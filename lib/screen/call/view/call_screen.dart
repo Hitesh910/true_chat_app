@@ -27,32 +27,35 @@ class _CallScreenState extends State<CallScreen> {
               const SizedBox(
                 height: 35,
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  IconButton.filled(
-                    style: ButtonStyle(
-                      backgroundColor: WidgetStatePropertyAll(
-                        Colors.grey.withOpacity(0.4),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    IconButton.filled(
+                      style: ButtonStyle(
+                        backgroundColor: WidgetStatePropertyAll(
+                          Colors.grey.withOpacity(0.4),
+                        ),
                       ),
+                      onPressed: () {},
+                      icon: const Icon(Icons.search),
                     ),
-                    onPressed: () {},
-                    icon: const Icon(Icons.search),
-                  ),
-                  const Text(
-                    "Calls",
-                    style: TextStyle(color: Colors.white, fontSize: 24),
-                  ),
-                  Container(
-                    height: 50,
-                    width: 50,
-                    decoration: const BoxDecoration(
-                      color: Colors.grey,
-                      shape: BoxShape.circle,
+                    const Text(
+                      "Calls",
+                      style: TextStyle(color: Colors.white, fontSize: 24),
                     ),
-                    child: const Icon(Icons.call),
-                  )
-                ],
+                    Container(
+                      height: 50,
+                      width: 50,
+                      decoration: const BoxDecoration(
+                        color: Colors.grey,
+                        shape: BoxShape.circle,
+                      ),
+                      child: const Icon(Icons.call),
+                    )
+                  ],
+                ),
               ),
               const SizedBox(
                 height: 35,
@@ -87,14 +90,14 @@ class _CallScreenState extends State<CallScreen> {
                           itemCount: 10,
                           itemBuilder: (context, index) {
                             return const ListTile(
-                              title: Text("Name"),
+                              title: Text("Name",style: TextStyle(color: Colors.black),),
                               leading: SizedBox(
                                 height: 120,
                                 width: 50,
                                 child: CircleAvatar(),
                               ),
-                              trailing: Icon(Icons.call),subtitle: Row(children: [
-                                Icon(Icons.call,size: 14,),Text("Today 9:30")
+                              trailing: Icon(Icons.call,color: Colors.black),subtitle: Row(children: [
+                                Icon(Icons.call,size: 14,color: Colors.black,),Text("Today 9:30",style: TextStyle(color: Colors.black),)
                             ],),
                             );
                           },

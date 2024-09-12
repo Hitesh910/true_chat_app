@@ -1,6 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:true_chat_app/screen/chat/controller/chat_controller.dart';
 import 'package:true_chat_app/screen/home/controller/home_controller.dart';
+
+import '../../../utils/helper/auth_helper.dart';
+import '../../../utils/helper/db_helper.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -11,13 +16,18 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   HomeController controller = Get.put(HomeController());
+  ChatController chatController = Get.put(ChatController());
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    controller.getUser();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(
-      //   // title:  const Text("TrueChat App"),
-      // ),
       body: Stack(
         children: [
           Container(
@@ -35,32 +45,35 @@ class _HomeScreenState extends State<HomeScreen> {
               const SizedBox(
                 height: 35,
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  IconButton.filled(
-                    style: ButtonStyle(
-                      backgroundColor: WidgetStatePropertyAll(
-                        Colors.grey.withOpacity(0.4),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    IconButton.filled(
+                      style: ButtonStyle(
+                        backgroundColor: WidgetStatePropertyAll(
+                          Colors.grey.withOpacity(0.4),
+                        ),
                       ),
+                      onPressed: () {},
+                      icon: const Icon(Icons.search),
                     ),
-                    onPressed: () {},
-                    icon: const Icon(Icons.search),
-                  ),
-                  const Text(
-                    "True Chat",
-                    style: TextStyle(color: Colors.white, fontSize: 24),
-                  ),
-                  Container(
-                    height: 50,
-                    width: 50,
-                    decoration: const BoxDecoration(
-                      color: Colors.grey,
-                      shape: BoxShape.circle,
+                    const Text(
+                      "True Chat",
+                      style: TextStyle(color: Colors.white, fontSize: 24),
                     ),
-                    child: const Icon(Icons.person),
-                  )
-                ],
+                    Container(
+                      height: 50,
+                      width: 50,
+                      decoration: const BoxDecoration(
+                        color: Colors.grey,
+                        shape: BoxShape.circle,
+                      ),
+                      child: const Icon(Icons.person),
+                    )
+                  ],
+                ),
               ),
               const SizedBox(
                 height: 35,
@@ -70,7 +83,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Row(
                   children: List.generate(
                     controller.profileList.length,
-                    (index) {
+                        (index) {
                       return Container(
                         height: 90,
                         margin: const EdgeInsets.symmetric(
@@ -130,21 +143,57 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       ),
                       Expanded(
-                        child: ListView.builder(
-                          itemCount: 10,
-                          itemBuilder: (context, index) {
-                            return const ListTile(
-                              title: Text("Name"),
-                              leading: SizedBox(
-                                height: 120,
-                                width: 50,
-                                child: CircleAvatar(),
-                              ),
-                              subtitle: Text("How are you?"),
-                              trailing: Text(
-                                "2 min ago",
-                                style: TextStyle(fontSize: 14),
-                              ),
+                        child: StreamBuilder(
+                          stream: controller.chatUser,
+                          builder: (context, snapshot) {
+                            if (snapshot.hasError) {
+                              return Text("${snapshot.error}");
+                            } else if (snapshot.hasData) {
+                              controller.userList.clear();
+                              QuerySnapshot? sq = snapshot.data;
+                              List<QueryDocumentSnapshot> sqList = sq!.docs;
+                        
+                              for (var x in sqList) {
+                                Map m1 = x.data() as Map;
+                                List uidList = m1["uids"];
+                                String receiverID = "";
+                                if (uidList[0] == AuthHelper.helper.user!.uid) {
+                                  receiverID = uidList[1];
+                                } else {
+                                  receiverID = uidList[0];
+                                }
+                                controller.getChat(receiverID).then(
+                                      (value) {
+                                    controller.userList.add(controller.model!);
+                                  },
+                                );
+                              }
+                        
+                              return Obx(
+                                    () => ListView.builder(
+                                  itemCount: controller.userList.length,
+                                  itemBuilder: (context, index) {
+                                    return ListTile(
+                                      onTap: () async {
+                                        await FireDbHelper.helper.getDocDataId(
+                                            AuthHelper.helper.user!.uid,
+                                            controller.userList[index].uid!);
+                                        Get.toNamed("/chat",
+                                            arguments: controller.userList[index]);
+                                      },
+                                      leading: CircleAvatar(
+                                        child: Text(controller.userList[index].name![0]),
+                                      ),
+                                      title: Text("${controller.userList[index].name}"),
+                                      subtitle: Text("${controller.userList[index].mobile}"),
+                                      // trailing: Text("${controller.userList[index].}"),
+                                    );
+                                  },
+                                ),
+                              );
+                            }
+                            return const Center(
+                              child: CircularProgressIndicator(),
                             );
                           },
                         ),

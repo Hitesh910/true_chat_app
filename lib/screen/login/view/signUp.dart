@@ -15,6 +15,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   TextEditingController txtEmail = TextEditingController();
   TextEditingController txtPassword = TextEditingController();
   TextEditingController txtConfirmPassword = TextEditingController();
+  GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -24,144 +25,171 @@ class _SignUpScreenState extends State<SignUpScreen> {
         backgroundColor: Colors.white,
         // leading: const Icon(Icons.arrow_back),
         actions: [
-          // IconButton(
-          //   onPressed: () {},
-          //   icon: Icon(Icons.arrow_back),
-          // ),
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(10),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(
-              height: 20,
-            ),
-            const Center(
-              child: Text(
-                "Sign up with Email",
+      body: Form(
+        key: formKey,
+        child: Padding(
+          padding: const EdgeInsets.all(10),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(
+                height: 20,
+              ),
+              const Center(
+                child: Text(
+                  "Sign up with Email",
+                  style: TextStyle(
+                      fontSize: 20,
+                      color: Color(0xff3D4A7A),
+                      fontWeight: FontWeight.w900),
+                ),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              const Center(
+                child: Text(
+                  "Get chatting with friends and family \n"
+                  "today by signing up for our chat app!",
+                  style: TextStyle(fontSize: 18),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+              const SizedBox(
+                height: 60,
+              ),
+              const Text(
+                "Your name",
                 style: TextStyle(
-                    fontSize: 20,
-                    color: Color(0xff3D4A7A),
-                    fontWeight: FontWeight.w900),
+                  fontSize: 15,
+                  color: Color(0xff3D4A7A),
+                  fontWeight: FontWeight.w500,
+                ),
               ),
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            Center(
-              child: Text(
-                "Get chatting with friends and family \n"
-                "today by signing up for our chat app!",
-                style: TextStyle(fontSize: 18),
-                textAlign: TextAlign.center,
-              ),
-            ),
-            const SizedBox(
-              height: 60,
-            ),
-            Text(
-              "Your name",
-              style: TextStyle(
-                fontSize: 15,
-                color: Color(0xff3D4A7A),
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-            Flexible(
-              child: TextFormField(
-                controller: txtName,
-              ),
-            ),
-            const SizedBox(
-              height: 25,
-            ),
-            Text(
-              "Your email",
-              style: TextStyle(
-                fontSize: 16,
-                color: Color(0xff3D4A7A),
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-            Flexible(
-              child: TextFormField(
-                controller: txtEmail,
-              ),
-            ),
-            const SizedBox(
-              height: 25,
-            ),
-            Text(
-              "Password",
-              style: TextStyle(
-                fontSize: 16,
-                color: Color(0xff3D4A7A),
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-            Flexible(
-              child: TextFormField(
-                controller: txtPassword,
-              ),
-            ),
-            const SizedBox(
-              height: 25,
-            ),
-            Text(
-              "Confirm password",
-              style: TextStyle(
-                fontSize: 16,
-                color: Color(0xff3D4A7A),
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-            Flexible(
-              child: TextFormField(
-                controller: txtConfirmPassword,
-              ),
-            ),
-            // SizedBox(height: 40,),
-            const Spacer(),
-            Expanded(
-              child: Center(
-                child: InkWell(
-                  onTap: () async {
-                    String? msg = await AuthHelper.helper
-                        .signUp(txtEmail.text, txtPassword.text);
 
-                    if (msg == "Success") {
-                      Get.toNamed("/login");
-                    } else {
-                      Get.defaultDialog(title: "${msg}");
+              Flexible(
+                child: TextFormField(
+                  controller: txtName,
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return "Enter valid name";
                     }
+                    return null;
                   },
-                  child: Container(
-                    height: 48,
-                    width: MediaQuery.sizeOf(context).width - 60,
-                    alignment: Alignment.center,
-                    decoration: const BoxDecoration(
-                      image: DecorationImage(
-                        image: AssetImage(
-                          "assets/images/container.png",
+                ),
+              ),
+              const SizedBox(
+                height: 25,
+              ),
+              const Text(
+                "Your email",
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Color(0xff3D4A7A),
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              Flexible(
+                child: TextFormField(
+                  controller: txtEmail,
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return "Enter valid email";
+                    } else if (!RegExp(r'^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$')
+                        .hasMatch(value)) {
+                      return "Invalid email";
+                    }
+                    return null;
+                  },
+                ),
+              ),
+              const SizedBox(
+                height: 25,
+              ),
+              const Text(
+                "Password",
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Color(0xff3D4A7A),
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+
+              Flexible(
+                child: TextFormField(
+                  controller: txtPassword,
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return "Enter valid password";
+                    }
+                    return null;
+                  },
+                ),
+              ),
+              const SizedBox(
+                height: 25,
+              ),
+              const Text(
+                "Confirm password",
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Color(0xff3D4A7A),
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              Flexible(
+                child: TextFormField(
+                  controller: txtConfirmPassword,
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return "Enter valid password";
+                    }
+                    return null;
+                  },
+                ),
+              ),
+               const SizedBox(height: 40,),
+              Expanded(
+                child: Center(
+                  child: InkWell(
+                    onTap: () async {
+                      String? msg = await AuthHelper.helper
+                          .signUp(txtEmail.text, txtPassword.text);
+
+                      if (msg == "Success") {
+                        Get.toNamed("/login");
+                      } else {
+                        Get.defaultDialog(title: "${msg}");
+                      }
+                    },
+                    child: Container(
+                      height: 48,
+                      width: MediaQuery.sizeOf(context).width - 60,
+                      alignment: Alignment.center,
+                      decoration: const BoxDecoration(
+                        image: DecorationImage(
+                          image: AssetImage(
+                            "assets/images/container.png",
+                          ),
+                          fit: BoxFit.fill,
                         ),
-                        fit: BoxFit.fill,
                       ),
-                    ),
-                    child: const Text(
-                      "Create an account",
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w700,
-                        color: Colors.white,
+                      child: const Text(
+                        "Create an account",
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w700,
+                          color: Colors.white,
+                        ),
                       ),
                     ),
                   ),
                 ),
-              ),
-            )
-          ],
+              )
+            ],
+          ),
         ),
       ),
     );
