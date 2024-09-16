@@ -56,7 +56,7 @@ class FireDbHelper {
     return profileList;
   }
 
-  void sentMsg(String senderUID, String receiverUID,ChatModel model) async {
+  void sentMsg(String senderUID, String receiverUID, ChatModel model) async {
     String? id = await checkConeverSation(senderUID, receiverUID);
 
     if (id == null) {
@@ -76,16 +76,21 @@ class FireDbHelper {
 
   Future<String?> checkConeverSation(
       String senderUID, String receiverUID) async {
-    QuerySnapshot snapshot = await fireStore
-        .collection('Chat')
-        .where("uids", isEqualTo: [senderUID, receiverUID]).get();
+    print("============ $senderUID  $receiverUID");
+
+    QuerySnapshot s2 = await fireStore.collection('Chat').get();
+     print("===================Fire dcs   ${s2.docs.length}");
+    QuerySnapshot snapshot = await fireStore.collection('Chat').where("uids", isEqualTo: [senderUID,receiverUID]).get();
+   print("===========================Fire dcs 2 ${snapshot.docs.length}");
     List<DocumentSnapshot> l1 = snapshot.docs;
+    print("======================================== list l1 ${l1.length}");
 
     if (l1.isEmpty) {
       QuerySnapshot snapshot = await fireStore
           .collection('Chat')
-          .where("uids", arrayContains: [receiverUID, senderUID]).get();
+          .where("uids", isEqualTo: [receiverUID, senderUID]).get();
       List<DocumentSnapshot> l2 = snapshot.docs;
+      print("======================================== list l2 ${l2.length}");
 
       if (l2.isEmpty) {
         return null;
@@ -99,28 +104,44 @@ class FireDbHelper {
     }
   }
 
-  Future<void> getDocDataId(String senderUID,String receiverUID)
-  async {
+  Future<void> getDocDataId(String senderUID, String receiverUID) async {
     docId = await checkConeverSation(senderUID, receiverUID);
+    print("===========================get doc id ${docId}");
   }
 
-  Stream<QuerySnapshot<Map<String, dynamic>>> getReadData()
-  {
-    return fireStore.collection("Chat").doc(docId).collection("msg").snapshots();
+  Stream<QuerySnapshot<Map>>? getReadData() {
+    print(
+        "====================================================== DOC ID $docId");
+    Stream<QuerySnapshot<Map>> snapshot = fireStore
+        .collection("Chat")
+        .doc(docId)
+        .collection("msg")
+        .orderBy("date", descending: false)
+        .snapshots();
+    return snapshot;
   }
 
-  Future<void> deleteData()
-  async {
-    await fireStore.collection("Chat").doc(docId).collection("msg").doc(docId).delete();
+  Future<void> deleteData() async {
+    await fireStore
+        .collection("Chat")
+        .doc(docId)
+        .collection("msg")
+        .doc(docId)
+        .delete();
   }
 
   Stream<QuerySnapshot<Map<String, dynamic>>> getChat() {
-    return fireStore.collection("Chat").where("uids",arrayContains: AuthHelper.helper.user!.uid).snapshots();
+    print(AuthHelper.helper.user!.uid);
+    return fireStore
+        .collection("Chat")
+        .where("uids", arrayContains: AuthHelper.helper.user!.uid)
+        .snapshots();
   }
 
   Future<ProfileModel> userChat(String receiverID) async {
-    DocumentSnapshot snapshot = await fireStore.collection("User").doc(receiverID).get();
-    Map m1=snapshot.data()as Map;
+    DocumentSnapshot snapshot =
+        await fireStore.collection("User").doc(receiverID).get();
+    Map m1 = snapshot.data() as Map;
     ProfileModel userChatList = ProfileModel.mapToModel(m1);
 
     return userChatList;

@@ -20,7 +20,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     controller.getUser();
     super.initState();
   }
@@ -83,7 +82,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Row(
                   children: List.generate(
                     controller.profileList.length,
-                        (index) {
+                    (index) {
                       return Container(
                         height: 90,
                         margin: const EdgeInsets.symmetric(
@@ -152,7 +151,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               controller.userList.clear();
                               QuerySnapshot? sq = snapshot.data;
                               List<QueryDocumentSnapshot> sqList = sq!.docs;
-                        
+
                               for (var x in sqList) {
                                 Map m1 = x.data() as Map;
                                 List uidList = m1["uids"];
@@ -163,29 +162,35 @@ class _HomeScreenState extends State<HomeScreen> {
                                   receiverID = uidList[0];
                                 }
                                 controller.getChat(receiverID).then(
-                                      (value) {
+                                  (value) {
                                     controller.userList.add(controller.model!);
                                   },
                                 );
                               }
-                        
+
                               return Obx(
-                                    () => ListView.builder(
+                                () => ListView.builder(
                                   itemCount: controller.userList.length,
                                   itemBuilder: (context, index) {
                                     return ListTile(
                                       onTap: () async {
+                                        print("======================Controller ${controller.userList[index].uid}");
+                                        print("======================Authhelper ${AuthHelper.helper.user!.uid}");
                                         await FireDbHelper.helper.getDocDataId(
                                             AuthHelper.helper.user!.uid,
                                             controller.userList[index].uid!);
                                         Get.toNamed("/chat",
-                                            arguments: controller.userList[index]);
+                                            arguments:
+                                                controller.userList[index]);
                                       },
                                       leading: CircleAvatar(
-                                        child: Text(controller.userList[index].name![0]),
+                                        child: Text(controller
+                                            .userList[index].name![0]),
                                       ),
-                                      title: Text("${controller.userList[index].name}"),
-                                      subtitle: Text("${controller.userList[index].mobile}"),
+                                      title: Text(
+                                          "${controller.userList[index].name}"),
+                                      subtitle: Text(
+                                          "${controller.userList[index].mobile}"),
                                       // trailing: Text("${controller.userList[index].}"),
                                     );
                                   },
@@ -206,8 +211,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
       ),
-      floatingActionButton:
-      FloatingActionButton(
+      floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.blue.shade900,
         onPressed: () {
           Navigator.pushNamed(context, '/user');

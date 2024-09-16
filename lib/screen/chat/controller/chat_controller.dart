@@ -7,5 +7,6 @@ class ChatController extends GetxController {
 
   void readData() {
     sp = FireDbHelper.helper.getReadData();
+    print("************************************method");
   }
 }

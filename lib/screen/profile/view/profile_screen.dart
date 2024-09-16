@@ -19,15 +19,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
   TextEditingController txtBio = TextEditingController();
   ProfileController controller = Get.put(ProfileController());
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
-
+@override
   void initState() {
-    // TODO: implement initState
     getData();
     super.initState();
   }
 
-  Future<void> getData()
-  async {
+  Future<void> getData() async {
     controller.getData();
     if(controller.model!=null) {
       txtName.text = controller.model!.name!;
@@ -42,7 +40,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Profile"),
+        title: const Text("Profile"),
         centerTitle: true,
       ),
       body: Form(

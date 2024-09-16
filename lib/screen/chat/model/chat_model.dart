@@ -11,8 +11,8 @@ class ChatModel
   {
     return ChatModel(
       msg: m1['msg'],
-      senderUID: m1['SenderUID'],
-      dateTime: m1['date']
+      senderUID: m1['sendUID'],
+      dateTime: m1['date'],
     );
   }
 }
