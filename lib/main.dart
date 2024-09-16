@@ -3,15 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:true_chat_app/screen/home/controller/home_controller.dart';
 import 'package:true_chat_app/utils/app_routes.dart';
-import 'package:true_chat_app/utils/helper/app_theme.dart';
+import 'package:true_chat_app/utils/app_theme.dart';
 import 'package:true_chat_app/utils/helper/fcm_helper.dart';
 import 'package:true_chat_app/utils/services/notification_services.dart';
-import 'package:timezone/timezone.dart' as tz;
 
 
 import 'firebase_options.dart';
+import 'package:timezone/timezone.dart' as tz;
+import 'package:timezone/data/latest.dart' as tz;
 
-Future<void> main()
+void main()
 async {
   WidgetsFlutterBinding.ensureInitialized();
   HomeController controller = Get.put(HomeController());
@@ -20,7 +21,8 @@ async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   NotificationServices.notificationServices.initialize();
-  // tz.initializeDatabase();
+    tz.initializeTimeZones();
+  FcmHelper.helper.receiveData();
   FcmHelper.helper.receiveData();
   runApp(
       Obx(

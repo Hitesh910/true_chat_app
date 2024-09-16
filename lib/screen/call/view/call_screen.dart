@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:true_chat_app/screen/home/controller/home_controller.dart';
+
 class CallScreen extends StatefulWidget {
   const CallScreen({super.key});
 
@@ -7,6 +10,8 @@ class CallScreen extends StatefulWidget {
 }
 
 class _CallScreenState extends State<CallScreen> {
+  HomeController controller = Get.put(HomeController());
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,17 +38,21 @@ class _CallScreenState extends State<CallScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     IconButton.filled(
-                      style: ButtonStyle(
-                        backgroundColor: WidgetStatePropertyAll(
-                          Colors.grey.withOpacity(0.4),
-                        ),
+                      style: const ButtonStyle(
+                        backgroundColor: WidgetStatePropertyAll(Colors.grey),
                       ),
                       onPressed: () {},
-                      icon: const Icon(Icons.search),
+                      icon: const Icon(
+                        Icons.search,
+                        color: Colors.white,
+                      ),
                     ),
                     const Text(
                       "Calls",
-                      style: TextStyle(color: Colors.white, fontSize: 24),
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 24,
+                      ),
                     ),
                     Container(
                       height: 50,
@@ -52,7 +61,10 @@ class _CallScreenState extends State<CallScreen> {
                         color: Colors.grey,
                         shape: BoxShape.circle,
                       ),
-                      child: const Icon(Icons.call),
+                      child: const Icon(
+                        Icons.call,
+                        color: Colors.white,
+                      ),
                     )
                   ],
                 ),
@@ -65,12 +77,14 @@ class _CallScreenState extends State<CallScreen> {
                   height: MediaQuery.sizeOf(context).height,
                   width: MediaQuery.sizeOf(context).width,
                   // color: Colors.white,
-                  decoration: const BoxDecoration(
-                    borderRadius: BorderRadius.only(
+                  decoration: BoxDecoration(
+                    borderRadius: const BorderRadius.only(
                       topLeft: Radius.circular(50),
                       topRight: Radius.circular(50),
                     ),
-                    color: Colors.white,
+                    color: controller.theme.value == true
+                        ? Colors.white
+                        : Colors.black54,
                   ),
                   child: Column(
                     children: [
@@ -89,16 +103,45 @@ class _CallScreenState extends State<CallScreen> {
                         child: ListView.builder(
                           itemCount: 10,
                           itemBuilder: (context, index) {
-                            return const ListTile(
-                              title: Text("Name",style: TextStyle(color: Colors.black),),
-                              leading: SizedBox(
+                            return ListTile(
+                              title: Text(
+                                "Name",
+                                style: TextStyle(
+                                  color: controller.theme.value == true
+                                      ? Colors.black
+                                      : Colors.white,
+                                ),
+                              ),
+                              leading: const SizedBox(
                                 height: 120,
                                 width: 50,
                                 child: CircleAvatar(),
                               ),
-                              trailing: Icon(Icons.call,color: Colors.black),subtitle: Row(children: [
-                                Icon(Icons.call,size: 14,color: Colors.black,),Text("Today 9:30",style: TextStyle(color: Colors.black),)
-                            ],),
+                              trailing: Icon(
+                                Icons.call,
+                                color: controller.theme.value
+                                    ? Colors.black
+                                    : Colors.white,
+                              ),
+                              subtitle: Row(
+                                children: [
+                                  Icon(
+                                    Icons.call,
+                                    size: 14,
+                                    color: controller.theme.value == true
+                                        ? Colors.black
+                                        : Colors.white,
+                                  ),
+                                  Text(
+                                    "Today 9:30",
+                                    style: TextStyle(
+                                      color: controller.theme.value == true
+                                          ? Colors.black
+                                          : Colors.white,
+                                    ),
+                                  )
+                                ],
+                              ),
                             );
                           },
                         ),

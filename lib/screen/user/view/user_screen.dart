@@ -24,10 +24,10 @@ class _UserScreenState extends State<UserScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      // backgroundColor: Colors.black,
       appBar: AppBar(
-        backgroundColor: Colors.white,
-        title: Text("All user"),
+         // backgroundColor: Colors.white,
+        title: const Text("All user"),
       ),
       body: Column(
         children: [
@@ -50,7 +50,7 @@ class _UserScreenState extends State<UserScreen> {
                     height: 120,
                     width: 50,
                     child: CircleAvatar(
-                      child: Text("${controller.profileList[index].name![0]}"),
+                      child: Text(controller.profileList[index].name![0]),
                     ),
                   ),
                   subtitle: const Text("How are you?"),

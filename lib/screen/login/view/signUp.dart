@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:true_chat_app/screen/home/controller/home_controller.dart';
 
 import '../../../utils/helper/auth_helper.dart';
 
@@ -16,16 +17,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
   TextEditingController txtPassword = TextEditingController();
   TextEditingController txtConfirmPassword = TextEditingController();
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  HomeController controller = Get.put(HomeController());
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      // backgroundColor: controller.theme.value == true ?Colors.white:Colors.black,
       appBar: AppBar(
-        backgroundColor: Colors.white,
-        // leading: const Icon(Icons.arrow_back),
-        actions: [
-        ],
+        // backgroundColor:
+        // controller.theme.value == true ? Colors.white : Colors.black,
+        actions: [],
       ),
       body: Form(
         key: formKey,
@@ -37,12 +38,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
               const SizedBox(
                 height: 20,
               ),
-              const Center(
+              Center(
                 child: Text(
                   "Sign up with Email",
                   style: TextStyle(
                       fontSize: 20,
-                      color: Color(0xff3D4A7A),
+                      color: controller.theme.value == true
+                          ? const Color(0xff3D4A7A)
+                          : const Color(0xff6581BF),
                       fontWeight: FontWeight.w900),
                 ),
               ),
@@ -60,15 +63,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
               const SizedBox(
                 height: 60,
               ),
-              const Text(
+              Text(
                 "Your name",
                 style: TextStyle(
                   fontSize: 15,
-                  color: Color(0xff3D4A7A),
+                  color: controller.theme.value == true
+                      ? const Color(0xff3D4A7A)
+                      : const Color(0xff6581BF),
                   fontWeight: FontWeight.w500,
                 ),
               ),
-
               Flexible(
                 child: TextFormField(
                   controller: txtName,
@@ -83,11 +87,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
               const SizedBox(
                 height: 25,
               ),
-              const Text(
+              Text(
                 "Your email",
                 style: TextStyle(
                   fontSize: 16,
-                  color: Color(0xff3D4A7A),
+                  color: controller.theme.value == true
+                      ? const Color(0xff3D4A7A)
+                      : const Color(0xff6581BF),
                   fontWeight: FontWeight.w500,
                 ),
               ),
@@ -108,18 +114,42 @@ class _SignUpScreenState extends State<SignUpScreen> {
               const SizedBox(
                 height: 25,
               ),
-              const Text(
+              Text(
                 "Password",
                 style: TextStyle(
                   fontSize: 16,
-                  color: Color(0xff3D4A7A),
+                  color: controller.theme.value == true
+                      ? const Color(0xff3D4A7A)
+                      : const Color(0xff6581BF),
                   fontWeight: FontWeight.w500,
                 ),
               ),
-
               Flexible(
                 child: TextFormField(
                   controller: txtPassword,
+                  decoration: InputDecoration(
+                    suffix: controller.isHide.value == true
+                        ? IconButton(
+                            onPressed: () {
+                              controller.isHide.value = false;
+                              print(controller.isHide.value);
+                            },
+                            icon: const Icon(
+                              Icons.remove_red_eye,
+                              color: Colors.white,
+                            ),
+                          )
+                        : IconButton(
+                            onPressed: () {
+                              controller.isHide.value = true;
+                              print(controller.isHide.value);
+                            },
+                            icon: const Icon(
+                              Icons.hide_source,
+                              color: Colors.white,
+                            ),
+                          ),
+                  ),
                   validator: (value) {
                     if (value!.isEmpty) {
                       return "Enter valid password";
@@ -131,11 +161,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
               const SizedBox(
                 height: 25,
               ),
-              const Text(
+              Text(
                 "Confirm password",
                 style: TextStyle(
                   fontSize: 16,
-                  color: Color(0xff3D4A7A),
+                  color: controller.theme.value == true
+                      ? const Color(0xff3D4A7A)
+                      : const Color(0xff6581BF),
                   fontWeight: FontWeight.w500,
                 ),
               ),
@@ -150,18 +182,22 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   },
                 ),
               ),
-               const SizedBox(height: 40,),
+              const SizedBox(
+                height: 40,
+              ),
               Expanded(
                 child: Center(
                   child: InkWell(
                     onTap: () async {
-                      String? msg = await AuthHelper.helper
-                          .signUp(txtEmail.text, txtPassword.text);
+                      if(formKey.currentState!.validate()) {
+                        String? msg = await AuthHelper.helper
+                            .signUp(txtEmail.text, txtPassword.text);
 
-                      if (msg == "Success") {
-                        Get.toNamed("/login");
-                      } else {
-                        Get.defaultDialog(title: "${msg}");
+                        if (msg == "Success") {
+                          Get.toNamed("/login");
+                        } else {
+                          Get.defaultDialog(title: "${msg}");
+                        }
                       }
                     },
                     child: Container(

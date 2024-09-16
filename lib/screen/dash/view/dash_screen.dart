@@ -43,7 +43,7 @@ class _DashScreenState extends State<DashScreen> {
         () =>  BottomNavigationBar(
           currentIndex: controller.i.value,
           selectedItemColor: Colors.blueAccent,
-          unselectedItemColor: Colors.black,
+          unselectedItemColor: controller.theme.value == true ?Colors.black : Colors.white,
           backgroundColor: Colors.black,
           onTap: (value) {
             controller.i.value = value;

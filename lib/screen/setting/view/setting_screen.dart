@@ -65,17 +65,18 @@ class _SettingScreenState extends State<SettingScreen> {
               const SizedBox(
                 height: 35,
               ),
-              Expanded(
-                child: Container(
+              Obx(
+                () =>  Expanded(
+                    child: Container(
                   height: MediaQuery.sizeOf(context).height,
                   width: MediaQuery.sizeOf(context).width,
                   // color: Colors.white,
-                  decoration: const BoxDecoration(
+                  decoration:  BoxDecoration(
                     borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(50),
                       topRight: Radius.circular(50),
                     ),
-                    color: Colors.white,
+                    color: homeController.theme.value == true ?Colors.white :Colors.black54,
                   ),
                   child: SingleChildScrollView(
                     child: Column(
@@ -126,44 +127,66 @@ class _SettingScreenState extends State<SettingScreen> {
                             Get.toNamed("/profile");
                           },
                           leading: const CircleAvatar(
-                            backgroundColor: Color(0xffDEEBFF),
+                            // backgroundColor: Color(0xffDEEBFF),
                             child: Icon(Icons.key),
                           ),
-                          title: const Text("Account",style: TextStyle(color: Colors.black),),
-                          subtitle:
-                              const Text("Privacy, security, change number",style: TextStyle(color: Colors.black),),
+                          title: const Text(
+                            "Account",
+                            // style: TextStyle(color: Colors.black),
+                          ),
+                          subtitle: const Text(
+                            "Privacy, security, change number",
+                            // style: TextStyle(color: Colors.black),
+                          ),
                         ),
                         const ListTile(
                           leading: CircleAvatar(
-                            backgroundColor: Color(0xffDEEBFF),
+                            // backgroundColor: Color(0xffDEEBFF),
                             child: Icon(Icons.message),
                           ),
                           title: Text("Chat"),
-                          subtitle: Text("Chat history, theme, wallpapers",style: TextStyle(color: Colors.black),),
+                          subtitle: Text(
+                            "Chat history, theme, wallpapers",
+                            // style: TextStyle(color: Colors.black),
+                          ),
                         ),
                         const ListTile(
                           leading: CircleAvatar(
-                            backgroundColor: Color(0xffDEEBFF),
+                            // backgroundColor: Color(0xffDEEBFF),
                             child: Icon(Icons.notification_important),
                           ),
-                          title: Text("Notifications",style: TextStyle(color: Colors.black),),
-                          subtitle: Text("Messages, group and others",style: TextStyle(color: Colors.black),),
+                          title: Text(
+                            "Notifications",
+                            // style: TextStyle(color: Colors.black),
+                          ),
+                          subtitle: Text(
+                            "Messages, group and others",
+                            // style: TextStyle(color: Colors.black),
+                          ),
                         ),
                         const ListTile(
                           leading: CircleAvatar(
-                            backgroundColor: Color(0xffDEEBFF),
+                            // backgroundColor: Color(0xffDEEBFF),
                             child: Icon(Icons.help),
                           ),
-                          title: Text("Help",style: TextStyle(color: Colors.black),),
-                          subtitle:
-                              Text("Help center, contact us, privacy policy",style: TextStyle(color: Colors.black),),
+                          title: Text(
+                            "Help",
+                            // style: TextStyle(color: Colors.black),
+                          ),
+                          subtitle: Text(
+                            "Help center, contact us, privacy policy",
+                            // style: TextStyle(color: Colors.black),
+                          ),
                         ),
                         const ListTile(
                           leading: CircleAvatar(
-                            backgroundColor: Color(0xffDEEBFF),
+                            // backgroundColor: Color(0xffDEEBFF),
                             child: Icon(Icons.storage),
                           ),
-                          title: Text("Storage and data",style: TextStyle(color: Colors.black),),
+                          title: Text(
+                            "Storage and data",
+                            // style: TextStyle(color: Colors.black),
+                          ),
                           subtitle: Text("Network usage, storage usage"),
                         ),
                         ListTile(
@@ -193,16 +216,21 @@ class _SettingScreenState extends State<SettingScreen> {
                             );
                           },
                           leading: const CircleAvatar(
-                            backgroundColor: Color(0xffDEEBFF),
+                            // backgroundColor: Color(0xffDEEBFF),
                             child: Icon(Icons.logout),
                           ),
-                          title: const Text("Log out",style: TextStyle(color: Colors.black)),
-                          subtitle: const Text("Logout app",style: TextStyle(color: Colors.black)),
+                          title: const Text("Log out",
+                              // style: TextStyle(color: Colors.black)
+                            ),
+                          subtitle: const Text("Logout app",
+                              // style: TextStyle(color: Colors.black),
+                          ),
                         ),
                       ],
                     ),
-                  ),)
-                ),
+                  ),
+                )),
+              ),
             ],
           )
         ],

@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:true_chat_app/screen/home/controller/home_controller.dart';
 
 import '../../../utils/helper/db_helper.dart';
 import '../../../utils/helper/auth_helper.dart';
@@ -21,6 +22,7 @@ class _ChatScreenState extends State<ChatScreen> {
   ChatController controller = Get.put(ChatController());
   ProfileModel? model = Get.arguments;
   TextEditingController txtMsg = TextEditingController();
+  HomeController homeController = Get.put(HomeController());
 
   @override
   void initState() {
@@ -32,34 +34,62 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor:
+          homeController.theme.value == true ? Colors.white : Colors.black54,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor:
+            homeController.theme.value == true ? Colors.white : Colors.black54,
         title: Row(
           children: [
-            const CircleAvatar(),
+            CircleAvatar(
+              child: Text(model!.name![0]),
+            ),
             SizedBox(
               width: MediaQuery.sizeOf(context).width * 0.05,
             ),
-            Text("${model!.name}"),
+            Text(
+              "${model!.name}",
+              style: TextStyle(
+                  color: homeController.theme.value == true
+                      ? Colors.black
+                      : Colors.white),
+            ),
           ],
         ),
         actions: [
           IconButton(
             onPressed: () {},
-            icon: const Icon(
+            icon: Icon(
               Icons.call_outlined,
               size: 28,
+              color: homeController.theme.value == true
+                  ? Colors.black
+                  : Colors.white,
             ),
           ),
           IconButton(
             onPressed: () {},
-            icon: const Icon(
+            icon: Icon(
               Icons.video_call_outlined,
               size: 28,
+              color: homeController.theme.value == true
+                  ? Colors.black
+                  : Colors.white,
             ),
           ),
         ],
+        leading: IconButton(
+          onPressed: () {
+            Get.back();
+          },
+          icon: Icon(
+            Icons.arrow_back,
+            size: 28,
+            color: homeController.theme.value == true
+                ? Colors.black
+                : Colors.white,
+          ),
+        ),
       ),
       body: Column(
         children: [
@@ -82,101 +112,166 @@ class _ChatScreenState extends State<ChatScreen> {
                 return Expanded(
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: ListView.builder(
-                      itemCount: chatList.length,
-                      itemBuilder: (context, index) {
-                        return Container(
-                          height: MediaQuery.sizeOf(context).height * 0.098,
-                          width: 10,
-                          margin: const EdgeInsets.all(5),
-                          alignment: chatList[index].senderUID == AuthHelper.helper.user!.uid
-                              ? Alignment.centerRight
-                              : Alignment.centerLeft,
-                          child: chatList[index].senderUID == AuthHelper.helper.user!.uid
-                              ? Column(
-                            children: [
-                              Container(
-                                alignment: Alignment.centerRight,
-                                padding: const EdgeInsets.all(10),
-                                height: 40,
-                                width:
-                                MediaQuery.sizeOf(context).width ,
-                                decoration: BoxDecoration(
-                                  color: const Color(0xff3D4A7A),
-                                  borderRadius: chatList[index].senderUID == AuthHelper.helper.user!.uid
-                                      ? const BorderRadius.only(
-                                    topRight: Radius.circular(0),
-                                    topLeft: Radius.circular(20),
-                                    bottomLeft:
-                                    Radius.circular(20),
-                                    bottomRight:
-                                    Radius.circular(20),
-                                  )
-                                      : const BorderRadius.only(
-                                    topRight: Radius.circular(20),
-                                    topLeft: Radius.circular(0),
-                                    bottomLeft:
-                                    Radius.circular(20),
-                                    bottomRight:
-                                    Radius.circular(20),
-                                  ),
-                                ),
-                                child: Text("${chatList[index].msg}"),
-                              ),
-                              Text(
-                                "${chatList[index].dateTime?.toDate().hour}:${chatList[index].dateTime?.toDate().minute}",
-                              )
-                            ],
-                          )
-                              : Row(
-                            children: [
-                              CircleAvatar(
-                                child: Text("${model!.name![0]}"),
-                              ),
-                              const SizedBox(
-                                width: 10,
-                              ),
-                              Column(
-                                crossAxisAlignment:
-                                CrossAxisAlignment.start,
-                                children: [
-                                  Text("${model!.name}"),
-                                  const SizedBox(
-                                    height: 8,
-                                  ),
-                                  Container(
-                                    padding: const EdgeInsets.all(5),
-                                    alignment: Alignment.centerLeft,
-                                    height: 30,
-                                    width: MediaQuery.sizeOf(context).width * 0.4,
-                                    decoration: const BoxDecoration(
-                                      borderRadius: BorderRadius.only(
-                                        topLeft: Radius.circular(
-                                          10,
+                    child: SingleChildScrollView(
+                      reverse: true,
+                      child: ListView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: chatList.length,
+                        itemBuilder: (context, index) {
+                          return Container(
+                            margin: const EdgeInsets.all(5),
+                            alignment: chatList[index].senderUID ==
+                                    AuthHelper.helper.user!.uid
+                                ? Alignment.centerRight
+                                : Alignment.centerLeft,
+                            child: chatList[index].senderUID ==
+                                    AuthHelper.helper.user!.uid
+                                ? Padding(
+                                    padding: const EdgeInsets.all(8),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.end,
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.end,
+                                          children: [
+                                            Container(
+                                              // width: MediaQuery.sizeOf(context).width * 0.50,
+                                              alignment: Alignment.centerRight,
+                                              padding: const EdgeInsets.all(10),
+                                              height: 40,
+                                              // width: MediaQuery.sizeOf(context).width,
+                                              decoration: BoxDecoration(
+                                                color: const Color(0xff3D4A7A),
+                                                borderRadius: chatList[index]
+                                                            .senderUID ==
+                                                        AuthHelper
+                                                            .helper.user!.uid
+                                                    ? const BorderRadius.only(
+                                                        topRight:
+                                                            Radius.circular(0),
+                                                        topLeft:
+                                                            Radius.circular(20),
+                                                        bottomLeft:
+                                                            Radius.circular(20),
+                                                        bottomRight:
+                                                            Radius.circular(20),
+                                                      )
+                                                    : const BorderRadius.only(
+                                                        topRight:
+                                                            Radius.circular(20),
+                                                        topLeft:
+                                                            Radius.circular(0),
+                                                        bottomLeft:
+                                                            Radius.circular(20),
+                                                        bottomRight:
+                                                            Radius.circular(20),
+                                                      ),
+                                              ),
+                                              child: Text(
+                                                "${chatList[index].msg}",
+                                                style: TextStyle(
+                                                    color: homeController
+                                                                .theme.value ==
+                                                            true
+                                                        ? Colors.white
+                                                        : Colors.white),
+                                              ),
+                                            ),
+                                          ],
                                         ),
-                                        topRight: Radius.circular(
-                                          10,
-                                        ),
-                                        bottomRight: Radius.circular(
-                                          10,
-                                        ),
-                                        bottomLeft: Radius.circular(
-                                          10,
-                                        ),
-                                      ),
-                                      color: Color(0xffF2F7FB),
+                                        Text(
+                                          "${chatList[index].dateTime?.toDate().hour}:${chatList[index].dateTime?.toDate().minute}",
+                                          style: TextStyle(
+                                            color: homeController.theme.value ==
+                                                    true
+                                                ? Colors.black
+                                                : Colors.white,
+                                          ),
+                                        )
+                                      ],
                                     ),
-                                    child: Text(
-                                        "${chatList[index].msg}"),
+                                  )
+                                : Column(
+                                    children: [
+                                      Row(
+                                        children: [
+                                          CircleAvatar(
+                                            child: Text(model!.name![0]),
+                                          ),
+                                          const SizedBox(
+                                            width: 10,
+                                          ),
+                                          Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                "${model!.name}",
+                                                style: TextStyle(
+                                                    color: homeController
+                                                                .theme.value ==
+                                                            true
+                                                        ? Colors.black
+                                                        : Colors.white),
+                                              ),
+                                              const SizedBox(
+                                                height: 8,
+                                              ),
+                                              Container(
+                                                padding:
+                                                    const EdgeInsets.all(8),
+                                                // margin: EdgeInsets.all(5),
+                                                alignment: Alignment.centerLeft,
+                                                decoration: const BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.only(
+                                                    topLeft: Radius.circular(
+                                                      0,
+                                                    ),
+                                                    topRight: Radius.circular(
+                                                      10,
+                                                    ),
+                                                    bottomRight:
+                                                        Radius.circular(
+                                                      10,
+                                                    ),
+                                                    bottomLeft: Radius.circular(
+                                                      10,
+                                                    ),
+                                                  ),
+                                                  color: Color(0xffF2F7FB),
+                                                ),
+                                                child: Text(
+                                                    "${chatList[index].msg}",
+                                                    style: const TextStyle(
+                                                        color: Colors.black)),
+                                              ),
+                                              Text(
+                                                "${chatList[index].dateTime?.toDate().hour}:${chatList[index].dateTime?.toDate().minute}",
+                                                style: TextStyle(
+                                                  color: homeController
+                                                              .theme.value ==
+                                                          true
+                                                      ? Colors.black
+                                                      : Colors.white,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                      const SizedBox(
+                                        height: 15,
+                                      )
+                                    ],
                                   ),
-                                  Text(
-                                      "${chatList[index].dateTime?.toDate().hour}:${chatList[index].dateTime?.toDate().minute}")
-                                ],
-                              )
-                            ],
-                          ),
-                        );
-                      },
+                          );
+                        },
+                      ),
                     ),
                   ),
                 );
@@ -187,35 +282,81 @@ class _ChatScreenState extends State<ChatScreen> {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Icon(Icons.add_link_rounded),
+                Icon(
+                  Icons.add_link_rounded,
+                  color: homeController.theme.value == true
+                      ? Colors.black
+                      : Colors.white,
+                ),
+                const SizedBox(
+                  width: 8,
+                ),
                 Expanded(
-                  child: TextField(
-                    controller: txtMsg,
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(10),
+                  child: SizedBox(
+                    // height: MediaQuery.sizeOf(context).height - 200,
+                    // width: MediaQuery.sizeOf(context).width,
+                    child: TextField(
+                      onSubmitted: (value) {
+                        if(txtMsg.text.isNotEmpty) {
+                          ChatModel chatModel = ChatModel(
+                            msg: txtMsg.text,
+                            dateTime: Timestamp.now(),
+                            senderUID: AuthHelper.helper.user!.uid,
+                          );
+
+                          FireDbHelper.helper.sentMsg(
+                            AuthHelper.helper.user!.uid,
+                            model!.uid!,
+                            chatModel,
+                          );
+                        }
+                        else if(txtMsg.text.isEmpty)
+                        {
+                          Get.snackbar("Empty data", "Please enter data");
+                        }
+                      },
+                      style: TextStyle(
+                          color: homeController.theme.value == true
+                              ? Colors.black
+                              : Colors.white),
+                      controller: txtMsg,
+                      decoration: InputDecoration(
+                        border: const OutlineInputBorder(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(10),
+                          ),
                         ),
+                        hintText: "Write a message",
+                        fillColor: homeController.theme.value == true
+                            ? Colors.white
+                            : Colors.black,
+                        filled: true,
                       ),
-                      hintText: "Write a message",
                     ),
                   ),
                 ),
                 IconButton.filled(
                   onPressed: () {
-                    ChatModel chatModel = ChatModel(
-                      msg: txtMsg.text,
-                      dateTime: Timestamp.now(),
-                      senderUID: AuthHelper.helper.user!.uid,
-                    );
+                    if(txtMsg.text.isNotEmpty) {
+                      ChatModel chatModel = ChatModel(
+                        msg: txtMsg.text,
+                        dateTime: Timestamp.now(),
+                        senderUID: AuthHelper.helper.user!.uid,
+                      );
 
-                    FireDbHelper.helper.sentMsg(
-                      AuthHelper.helper.user!.uid,
-                      model!.uid!,
-                      chatModel,
-                    );
-                  },
+                      FireDbHelper.helper.sentMsg(
+                        AuthHelper.helper.user!.uid,
+                        model!.uid!,
+                        chatModel,
+                      );
+                      }
+                      else if(txtMsg.text.isEmpty)
+                        {
+                          Get.snackbar("Empty data", "Please enter data");
+                        }
+                    },
                   icon: const Icon(Icons.send),
                 )
               ],

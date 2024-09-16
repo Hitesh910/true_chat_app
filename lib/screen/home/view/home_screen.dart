@@ -52,11 +52,14 @@ class _HomeScreenState extends State<HomeScreen> {
                     IconButton.filled(
                       style: ButtonStyle(
                         backgroundColor: WidgetStatePropertyAll(
-                          Colors.grey.withOpacity(0.4),
+                          Colors.white.withOpacity(0.8),
                         ),
                       ),
                       onPressed: () {},
-                      icon: const Icon(Icons.search),
+                      icon: const Icon(
+                        Icons.search,
+                        color: Colors.black,
+                      ),
                     ),
                     const Text(
                       "True Chat",
@@ -65,11 +68,14 @@ class _HomeScreenState extends State<HomeScreen> {
                     Container(
                       height: 50,
                       width: 50,
-                      decoration: const BoxDecoration(
-                        color: Colors.grey,
+                      decoration: BoxDecoration(
+                        color: Colors.white.withOpacity(0.9),
                         shape: BoxShape.circle,
                       ),
-                      child: const Icon(Icons.person),
+                      child: const Icon(
+                        Icons.person,
+                        color: Colors.black,
+                      ),
                     )
                   ],
                 ),
@@ -121,12 +127,12 @@ class _HomeScreenState extends State<HomeScreen> {
                   height: MediaQuery.sizeOf(context).height,
                   width: MediaQuery.sizeOf(context).width,
                   // color: Colors.white,
-                  decoration: const BoxDecoration(
-                    borderRadius: BorderRadius.only(
+                  decoration:  BoxDecoration(
+                    borderRadius: const BorderRadius.only(
                       topLeft: Radius.circular(50),
                       topRight: Radius.circular(50),
                     ),
-                    color: Colors.white,
+                    color:controller.theme.value == true ?Colors.white :Colors.black54,
                   ),
                   child: Column(
                     children: [
@@ -174,8 +180,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                   itemBuilder: (context, index) {
                                     return ListTile(
                                       onTap: () async {
-                                        print("======================Controller ${controller.userList[index].uid}");
-                                        print("======================Authhelper ${AuthHelper.helper.user!.uid}");
                                         await FireDbHelper.helper.getDocDataId(
                                             AuthHelper.helper.user!.uid,
                                             controller.userList[index].uid!);
@@ -214,7 +218,8 @@ class _HomeScreenState extends State<HomeScreen> {
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.blue.shade900,
         onPressed: () {
-          Navigator.pushNamed(context, '/user');
+
+          Get.toNamed("/user");
         },
         child: const Icon(Icons.add),
       ),

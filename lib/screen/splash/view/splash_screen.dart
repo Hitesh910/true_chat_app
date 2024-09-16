@@ -51,13 +51,25 @@ class _SplashScreenState extends State<SplashScreen> {
                     fit: BoxFit.fill,
                   ),
                 ),
-                child: const Text(
-                  "True chat app",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                  ),
+                child: Column(
+                  children: [
+                    Container(
+                      height: 100,
+                      width: 100,
+                      decoration: const BoxDecoration(
+                        // color: Colors.red,
+                          image: DecorationImage(
+                              image: AssetImage("assets/images/logo.png"),),),
+                    ),
+                    const Text(
+                      "True chat app",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ],

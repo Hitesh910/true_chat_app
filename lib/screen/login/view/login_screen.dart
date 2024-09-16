@@ -6,6 +6,8 @@ import 'package:flutter/painting.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:true_chat_app/screen/home/controller/home_controller.dart';
+import 'package:true_chat_app/screen/profile/controller/profile_controller.dart';
 
 import '../../../utils/helper/auth_helper.dart';
 
@@ -20,38 +22,45 @@ class _Login1ScreenState extends State<LoginScreen> {
   TextEditingController txtEmail = TextEditingController();
   TextEditingController txtPassword = TextEditingController();
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  ProfileController profileController = Get.put(ProfileController());
 
   @override
   Widget build(BuildContext context) {
+    HomeController controller = Get.put(HomeController());
     return Scaffold(
-      backgroundColor: Colors.white,
+      // backgroundColor: controller.theme.value == true ?Colors.white:Colors.black,
       appBar: AppBar(
         leading: IconButton(
           onPressed: () {
             Get.offAllNamed("/login");
           },
-          icon: const Icon(
+          icon: Icon(
             Icons.arrow_back,
-            color: Colors.black,
+            color:
+                controller.theme.value == false ? Colors.white : Colors.black,
           ),
         ),
-        backgroundColor: Colors.white,
+        // backgroundColor:
+        //     controller.theme.value == true ? Colors.white : Colors.black,
       ),
       body: Form(
         key: formKey,
         child: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding:
+                const EdgeInsets.only(top: 8.0, bottom: 8, left: 10, right: 10),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Text(
+                Text(
                   "Log in to Chatbox",
                   style: TextStyle(
                     fontSize: 22,
                     fontWeight: FontWeight.w900,
-                    color: Color(0xff3D4A7A),
+                    color: controller.theme.value == true
+                        ? Color(0xff3D4A7A)
+                        : Color(0xff6581BF),
                   ),
                 ),
                 const SizedBox(
@@ -102,10 +111,14 @@ class _Login1ScreenState extends State<LoginScreen> {
                       height: 50,
                       width: 50,
                       margin: const EdgeInsets.all(8),
-                      decoration: const BoxDecoration(
-                        image: DecorationImage(
-                          image: AssetImage("assets/images/apple2.png"),
-                        ),
+                      decoration: BoxDecoration(
+                        image: controller.theme.value == true
+                            ? const DecorationImage(
+                                image: AssetImage("assets/images/apple2.png"),
+                              )
+                            : const DecorationImage(
+                                image: AssetImage("assets/images/apple.png"),
+                              ),
                       ),
                     ),
                   ],
@@ -124,7 +137,7 @@ class _Login1ScreenState extends State<LoginScreen> {
                       ),
                     ),
                     Text(
-                      "OR",
+                      " OR ",
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w900,
@@ -143,13 +156,15 @@ class _Login1ScreenState extends State<LoginScreen> {
                 const SizedBox(
                   height: 20,
                 ),
-                const Align(
+                Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
                     "Your email",
                     style: TextStyle(
                       fontSize: 18,
-                      color: Color(0xff3D4A7A),
+                      color: controller.theme.value == true
+                          ? Color(0xff3D4A7A)
+                          : Color(0xff6581BF),
                       fontWeight: FontWeight.w500,
                     ),
                   ),
@@ -158,6 +173,10 @@ class _Login1ScreenState extends State<LoginScreen> {
                   height: 5,
                 ),
                 TextFormField(
+                  style: TextStyle(
+                      color: controller.theme.value == true
+                          ? Colors.black
+                          : Colors.white),
                   controller: txtEmail,
                   validator: (value) {
                     if (value!.isEmpty) {
@@ -172,13 +191,15 @@ class _Login1ScreenState extends State<LoginScreen> {
                 const SizedBox(
                   height: 20,
                 ),
-                const Align(
+                Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
                     "Password",
                     style: TextStyle(
                       fontSize: 18,
-                      color: Color(0xff3D4A7A),
+                      color: controller.theme.value == true
+                          ? Color(0xff3D4A7A)
+                          : Color(0xff6581BF),
                       fontWeight: FontWeight.w500,
                     ),
                   ),
@@ -186,15 +207,52 @@ class _Login1ScreenState extends State<LoginScreen> {
                 const SizedBox(
                   height: 5,
                 ),
-                TextFormField(
-                  controller: txtPassword,
-                  obscureText: true,
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return "Enter valid email";
-                    }
-                    return null;
-                  },
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: Obx(
+                    () => TextFormField(
+                      style: TextStyle(
+                          color: controller.theme.value == true
+                              ? Colors.black
+                              : Colors.white),
+                      decoration: InputDecoration(
+                        suffix: controller.isHide.value == true
+                            ? IconButton(
+                                onPressed: () {
+                                  controller.isHide.value = false;
+                                  // print(controller.isHide.value);
+                                },
+                                icon: Icon(
+                                  Icons.remove_red_eye,
+                                  color: controller.theme.value == true
+                                      ? Colors.black
+                                      : Colors.white,
+                                ),
+                              )
+                            : IconButton(
+                                onPressed: () {
+                                  controller.isHide.value = true;
+                                  // print(controller.isHide.value);
+                                },
+                                icon: Icon(
+                                  Icons.hide_source,
+                                  color: controller.theme.value == true
+                                      ? Colors.black
+                                      : Colors.white,
+                                ),
+                              ),
+                      ),
+                      controller: txtPassword,
+                      obscureText:
+                          controller.isHide.value == true ? true : false,
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return "Enter valid password";
+                        }
+                        return null;
+                      },
+                    ),
+                  ),
                 ),
                 const SizedBox(
                   height: 20,
@@ -204,7 +262,6 @@ class _Login1ScreenState extends State<LoginScreen> {
                     if (formKey.currentState!.validate()) {
                       String? msg = await AuthHelper.helper
                           .signIn(txtEmail.text, txtPassword.text);
-
                       if (msg == "Success") {
                         AuthHelper.helper.checkUser();
                         print("Sucesss");

@@ -25,6 +25,7 @@ class FcmHelper {
   Future<void> getToken()
   async {
     token =await FirebaseMessaging.instance.getToken();
+    print("============================${token}");
   }
 
   void receiveData()

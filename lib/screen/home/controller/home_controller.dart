@@ -24,6 +24,8 @@ class HomeController extends GetxController
   Stream<QuerySnapshot>? chatUser;
   RxList<ProfileModel> userList = <ProfileModel>[].obs;
   ProfileModel? model;
+  RxBool isHide = false.obs;
+  RxBool isHide1 = false.obs;
 
   void getTheme() async {
     SharedHelper helper = SharedHelper();
@@ -31,8 +33,8 @@ class HomeController extends GetxController
     theme.value = theme1 ?? false;
   }
 
-  void getUser() {
-    chatUser = FireDbHelper.helper.getChat();
+  void getUser()  {
+    chatUser =FireDbHelper.helper.getChat();
   }
 
   Future<void> getChat(String receiverID) async {
