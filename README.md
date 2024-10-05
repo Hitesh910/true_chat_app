@@ -1,6 +1,18 @@
 <h1>TrueChat App</h1>
 
-<h1>App with movkup</h1>
+
+# Project Requirements:
+- Knowledge of programming languages such as Dart..
+- Familiarity with the Flutter framework, Firebase Firestore DB, and Firebase Authentication.
+- Understanding of user interface design principles and best practices.
+- Experience with mobile app development and related tools like Android Studio or VS Code.
+- Ability to work independently.
+  
+# Project Technologies:
+- Dart language
+- Flutter framework with MVC and Provider/GetX architecture
+
+<h1>App with mockup</h1>
 <p>
     <img src = "https://github.com/user-attachments/assets/fcc6cfeb-db6a-439b-a1e0-1fc35f509d44"height="510"width="260"/>
       <img src = "https://github.com/user-attachments/assets/4863535b-cc70-441a-ba2d-7f10208c62c0"height="510"width="260"/>
